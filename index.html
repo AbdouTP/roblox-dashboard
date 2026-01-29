@@ -565,20 +565,21 @@
             
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="cookieInput">Cookie .ROBLOSECURITY</label>
-                    <input type="password" id="cookieInput" placeholder="Collez votre cookie ici..." required>
+                    <label for="userIdInput">Votre User ID ou Nom d'utilisateur Roblox</label>
+                    <input type="text" id="userIdInput" placeholder="Entrez votre ID ou nom d'utilisateur..." required>
                 </div>
                 
-                <button type="submit" class="btn">Se connecter</button>
+                <button type="submit" class="btn">Voir mes statistiques</button>
             </form>
 
             <div class="help-text">
-                <strong>⚠️ Comment obtenir votre cookie :</strong><br>
-                1. Connectez-vous sur <a href="https://www.roblox.com" target="_blank">roblox.com</a><br>
-                2. Ouvrez les outils de développement (F12)<br>
-                3. Allez dans l'onglet "Application" → "Cookies"<br>
-                4. Copiez la valeur de ".ROBLOSECURITY"<br>
-                5. Collez-la ci-dessus
+                <strong>ℹ️ Mode Démonstration :</strong><br>
+                Ce dashboard utilise des données simulées réalistes pour la démonstration.<br>
+                Pour utiliser vos vraies données, vous devez déployer le backend (voir README.md).<br><br>
+                <strong>Comment trouver votre User ID :</strong><br>
+                1. Allez sur votre profil Roblox<br>
+                2. L'URL ressemble à : roblox.com/users/<strong>12345678</strong>/profile<br>
+                3. Le nombre est votre User ID
             </div>
         </div>
     </div>
