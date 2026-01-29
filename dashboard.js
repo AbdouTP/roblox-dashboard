@@ -4,8 +4,8 @@ const USERS_API = 'https://users.roblox.com';
 const GAMES_API = 'https://games.roblox.com';
 
 // État global
-let cookie = '';
 let userId = null;
+let username = '';
 let transactions = [];
 let revenueChart = null;
 let typeChart = null;
@@ -20,8 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Gestion de l'authentification
 function checkAuth() {
-    cookie = localStorage.getItem('robloxCookie');
-    if (cookie) {
+    const savedUserId = localStorage.getItem('robloxUserId');
+    const savedUsername = localStorage.getItem('robloxUsername');
+    
+    if (savedUserId) {
+        userId = savedUserId;
+        username = savedUsername || 'Utilisateur';
         showDashboard();
         loadDashboardData();
     }
@@ -30,37 +34,29 @@ function checkAuth() {
 async function handleLogin(e) {
     e.preventDefault();
     
-    const cookieInput = document.getElementById('cookieInput').value.trim();
+    const userInput = document.getElementById('userIdInput').value.trim();
     
-    if (!cookieInput) {
-        alert('Veuillez entrer votre cookie');
+    if (!userInput) {
+        alert('Veuillez entrer votre User ID ou nom d\'utilisateur');
         return;
     }
     
-    cookie = cookieInput;
-    
-    // Tester le cookie
-    try {
-        const response = await fetch(`${USERS_API}/v1/users/authenticated`, {
-            headers: {
-                'Cookie': `.ROBLOSECURITY=${cookie}`
-            },
-            credentials: 'include'
-        });
-        
-        if (response.ok) {
-            const data = await response.json();
-            userId = data.id;
-            localStorage.setItem('robloxCookie', cookie);
-            showDashboard();
-            loadDashboardData();
-        } else {
-            alert('Cookie invalide. Veuillez réessayer.');
-        }
-    } catch (error) {
-        console.error('Erreur de connexion:', error);
-        alert('Erreur de connexion. Le cookie est peut-être invalide.');
+    // Si c'est un nombre, c'est probablement un User ID
+    if (!isNaN(userInput)) {
+        userId = userInput;
+        username = 'Utilisateur ' + userInput;
+    } else {
+        // Sinon, c'est un nom d'utilisateur
+        username = userInput;
+        userId = Math.floor(Math.random() * 1000000000); // ID simulé
     }
+    
+    // Sauvegarder
+    localStorage.setItem('robloxUserId', userId);
+    localStorage.setItem('robloxUsername', username);
+    
+    showDashboard();
+    loadDashboardData();
 }
 
 function showDashboard() {
@@ -69,9 +65,10 @@ function showDashboard() {
 }
 
 function logout() {
-    localStorage.removeItem('robloxCookie');
-    cookie = '';
+    localStorage.removeItem('robloxUserId');
+    localStorage.removeItem('robloxUsername');
     userId = null;
+    username = '';
     transactions = [];
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('dashboard').classList.remove('active');
@@ -94,9 +91,9 @@ async function loadDashboardData() {
 }
 
 async function loadUserInfo() {
-    // Cette fonction simule la récupération d'infos utilisateur
-    // Dans une vraie implémentation, vous feriez un appel API authentifié
-    console.log('Chargement des infos utilisateur...');
+    // Afficher le nom d'utilisateur dans le header
+    document.getElementById('usernameDisplay').textContent = username;
+    console.log('Dashboard chargé pour:', username);
 }
 
 async function loadTransactions() {
